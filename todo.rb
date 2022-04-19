@@ -1,4 +1,5 @@
 require "sinatra"
+require "sinatra/content_for"
 require "sinatra/reloader"
 require "tilt/erubis"
 
@@ -56,5 +57,5 @@ get '/lists/:list_id' do
   id = params[:list_id].to_i
   @list = session[:lists][id]
 
-  erb :display_list, layout: :layout
+  erb :list, layout: :layout
 end
