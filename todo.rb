@@ -59,3 +59,15 @@ get '/lists/:list_id' do
 
   erb :list, layout: :layout
 end
+
+get 'lists/:list_id/edit' do
+  id = params[:list_id].to_i
+  @list = session[:lists][id]
+
+  erb :edit, layout: :layout
+end
+
+post 'lists/:list_id/edit' do
+  id = params[:list_id].to_i
+  @list = session[:lists][id]
+end
