@@ -17,6 +17,10 @@ helpers do
     return "complete" if completed_list?(list)
   end
 
+  def todo_class(todo)
+    return "complete" if todo[:completed]
+  end
+
   def todos_remaining_count(list)
      list[:todos].select { |todo| !todo[:completed] }.size
   end
@@ -29,15 +33,20 @@ helpers do
     lists.sort_by! { |list| completed_list?(list) ? 1 : 0 }
   end
 
-  def sort_lists(lists)
-    sorted_lists = lists.sort_by { |list| completed_list?(list) ? 1 : 0 }
-    sorted_lists.each_with_index do |list, idx|
+  def sort_lists!(lists)
+    sorted_lists(lists).each_with_index do |list, idx|
       yield(list, idx)
     end
   end
 
   def sorted_todos(todos)
     todos.sort_by! { |todo| todo[:completed] ? 1 : 0 }
+  end
+
+  def sort_todos!(todos)
+    sorted_todos(todos).each_with_index do |todo, idx|
+      yield(todo, idx)
+    end
   end
 end
 
