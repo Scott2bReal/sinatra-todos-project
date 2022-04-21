@@ -30,12 +30,14 @@ helpers do
   end
 
   def sorted_todos(todos)
-    todos.sort_by { |todo| todo[:completed] ? 1 : 0 }
+    todos.sort_by! { |todo| todo[:completed] ? 1 : 0 }
   end
 end
 
 before do
   session[:lists] ||= []
+  @list_id = params[:list_id].to_i
+  @list = session[:lists][@list_id]
 end
 
 get "/" do
@@ -65,9 +67,9 @@ end
 
 # Create a new list
 post '/lists' do
+  error = error_for_list_name(params[:list_name])
   list_name = params[:list_name].strip
 
-  error = error_for_list_name(list_name)
   if error
     session[:error] = error
     erb :new_list, layout: :layout
@@ -80,24 +82,16 @@ end
 
 # View one specific list
 get '/lists/:list_id' do
-  @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
-
   erb :list, layout: :layout
 end
 
 # Render the list name change form
 get '/lists/:list_id/edit' do
-  @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
-
   erb :edit, layout: :layout
 end
 
 # Update existing list name
 post '/lists/:list_id' do
-  @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
   list_name = params[:list_name].strip
 
   error = error_for_list_name(list_name)
@@ -114,9 +108,7 @@ end
 
 # Delete list
 post '/lists/:list_id/destroy' do
-  @list_id = params[:list_id].to_i
-  name = session[:lists][@list_id][:name]
-
+  name = @list[:name]
   session[:lists].delete_at(@list_id)
   session[:success] = "The list \"#{name}\" was deleted"
   redirect '/lists'
@@ -133,8 +125,6 @@ end
 
 # Add to-do item to a list
 post '/lists/:list_id/todos' do
-  @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
   text = params[:todo].strip
 
   error = error_for_todo(@list, text)
@@ -151,7 +141,6 @@ end
 
 # Delete a specific to-do item from a list
 post '/lists/:list_id/todos/:todo_id/destroy' do
-  @list_id = params[:list_id].to_i
   @todo_id = params[:todo_id].to_i
   @todo_name = session[:lists][@list_id][:todos][@todo_id][:name]
 
@@ -162,9 +151,7 @@ end
 
 # Update the status of a to-do item
 post '/lists/:list_id/todos/:todo_id' do
-  @list_id = params[:list_id].to_i
   @todo_id = params[:todo_id].to_i
-  @list = session[:lists][@list_id]
   @todo = @list[:todos][@todo_id]
 
   @todo[:completed] = params[:completed] == "false"
@@ -174,9 +161,6 @@ end
 
 # Complete all todos on a given list
 post '/lists/:list_id/complete-all' do
-  @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
-
   @list[:todos].each do |todo|
     todo[:completed] = true
   end

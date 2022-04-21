@@ -13,25 +13,25 @@
     </ul>
   </header>
 
-    <ul>
-      <% sorted_todos(@list[:todos]).each_with_index do |todo, idx| %>
-        <% if todo[:completed] %>
-          <li class='complete'>
-        <% else %>
-          <li>
-        <% end %>
-            <form action="/lists/<%= @list_id %>/todos/<%= idx %>" method="post" class="check">
-              <input type="hidden" name="completed" value="<%= todo[:completed] %>"/>
-              <button type="submit">Complete</button>
-            </form>
-            <h3><%= todo[:name] %></h3>
-            <form class="delete" action="/lists/<%= @list_id %>/todos/<%= idx %>/destroy" method='post'>
-              <button type="submit">Delete</button>
-            </form>
-          </li>
+  <ul>
+    <% sorted_todos(@list[:todos]).each_with_index do |todo, idx| %>
+      <% if todo[:completed] %>
+        <li class='complete'>
+      <% else %>
+        <li>
       <% end %>
-    </ul>
-  </section>
+          <form action="/lists/<%= @list_id %>/todos/<%= idx %>" method="post" class="check">
+            <input type="hidden" name="completed" value="<%= todo[:completed] %>"/>
+            <button type="submit">Complete</button>
+          </form>
+          <h3><%= todo[:name] %></h3>
+          <form class="delete" action="/lists/<%= @list_id %>/todos/<%= idx %>/destroy" method='post'>
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+    <% end %>
+  </ul>
+</section>
 
 <form action="/lists/<%= @list_id %>/todos" method="post">
   <dl>
