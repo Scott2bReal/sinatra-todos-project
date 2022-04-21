@@ -6,7 +6,7 @@ require "tilt/erubis"
 configure do
   enable :sessions
   set :session_secret, 'secret'
-  set :erb, :escape_html => true
+  set :erb, { escape_html: true }
 end
 
 helpers do
@@ -23,7 +23,7 @@ helpers do
   end
 
   def todos_remaining_count(list)
-     list[:todos].select { |todo| !todo[:completed] }.size
+    list[:todos].select { |todo| !todo[:completed] }.size
   end
 
   def todos_count(list)

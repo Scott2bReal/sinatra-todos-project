@@ -225,7 +225,7 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Description: Limit size of blocks.
-  Enabled: true
+  Enabled: false
   Max: 20
 
 Metrics/ClassLength:
