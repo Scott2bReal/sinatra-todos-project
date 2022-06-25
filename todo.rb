@@ -187,17 +187,14 @@ end
 post '/lists/:list_id/todos/:todo_id/destroy' do
   @list_id = params[:list_id].to_i
   @list = load_list(@list_id)
-
   @todo_id = params[:todo_id].to_i
-  @todo = @storage.find_todo(@list, @todo_id)
-  @todo_name = @todo[:name]
 
   @storage.delete_todo_from_list(@list_id, @todo_id)
 
   if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
     status 204
   else
-    session[:success] = "The todo item '#{@todo_name}' was deleted"
+    session[:success] = "The todo item was deleted"
     redirect "/lists/#{@list_id}"
   end
 end
@@ -207,7 +204,9 @@ post '/lists/:list_id/todos/:todo_id' do
   @list_id = params[:list_id].to_i
   @list = load_list(@list_id)
   @todo_id = params[:todo_id].to_i
-  is_completed = params[:completed]
+  puts "params[:completed] = #{params[:completed]}"
+  is_completed = !params[:completed]
+  puts is_completed
 
   @storage.update_todo_status(@list_id, @todo_id, is_completed)
   session[:success] = "The todo has been updated."
