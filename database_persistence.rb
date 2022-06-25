@@ -11,12 +11,13 @@ class DatabasePersistence
     @db.exec_params(statement, params)
   end
 
-  def find_list(id)
+  def find_list(list_id)
     sql = "SELECT * FROM lists WHERE id = $1"
-    result = query(sql, id)
+    result = query(sql, list_id)
 
     tuple = result.first
-    { id: tuple['id'], name: tuple['name'], todos: [] }
+    todos = find_todos_for_list(list_id)
+    { id: tuple['id'].to_i, name: tuple['name'], todos: todos }
   end
 
   def all_lists
@@ -24,7 +25,9 @@ class DatabasePersistence
     result = query(sql)
 
     result.map do |tuple|
-      { id: tuple['id'], name: tuple['name'], todos: [] }
+      list_id = tuple['id'].to_i
+      todos = find_todos_for_list(list_id)
+      { id: list_id, name: tuple['name'], todos: todos }
     end
   end
 
@@ -69,5 +72,16 @@ class DatabasePersistence
 
   def find_todo(list, todo_id)
     # list[:todos].find { |todo| todo[:id] == todo_id }
+  end
+
+  private
+
+  def find_todos_for_list(list_id)
+    sql = "SELECT id, name, completed FROM todos WHERE list_id = $1"
+    result = query(sql, list_id)
+    result.map do |tuple|
+      completed = tuple['completed'] == 't'
+      { id: tuple['id'].to_i, name: tuple['name'], completed: completed }
+    end
   end
 end
