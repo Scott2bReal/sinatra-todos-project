@@ -20,7 +20,17 @@ class DatabasePersistence
   end
 
   def find_list(list_id)
-    sql = "SELECT * FROM lists WHERE id = $1"
+    # sql = "SELECT * FROM lists WHERE id = $1"
+    sql = <<~SQL
+      SELECT
+        l.*,
+        COUNT(NULLIF(t.completed, true)) AS todos_remaining_count,
+        COUNT(t.id) AS todos_count
+      FROM lists l
+      LEFT JOIN todos t ON t.list_id = l.id
+      GROUP BY l.id
+      HAVING l.id = $1;
+    SQL
     result = query(sql, list_id)
 
     tuple = result.first
