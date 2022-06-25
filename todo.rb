@@ -119,6 +119,7 @@ end
 get '/lists/:list_id' do
   @list_id = params[:list_id].to_i
   @list = load_list(@list_id)
+  @todos = @storage.find_todos_for_list(@list_id)
   erb :list, layout: :layout
 end
 
