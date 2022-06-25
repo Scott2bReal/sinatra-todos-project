@@ -29,11 +29,6 @@ helpers do
     return "complete" if todo[:completed]
   end
 
-  # def todos_remaining_count(list)
-  #   # list[:todos].select { |todo| !todo[:completed] }.size
-  #   list[:todos_remaining_count]
-  # end
-
   def todos_count(list)
     list[:todos].size
   end
