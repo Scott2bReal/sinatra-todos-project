@@ -35,7 +35,13 @@ class DatabasePersistence
 
     tuple = result.first
     todos = find_todos_for_list(list_id)
-    { id: tuple['id'].to_i, name: tuple['name'], todos: todos }
+    {
+      id: tuple['id'].to_i,
+      name: tuple['name'],
+      todos: todos,
+      todos_count: tuple['todos_count'].to_i,
+      todos_remaining_count: tuple['todos_remaining_count'].to_i
+    }
   end
 
   def all_lists

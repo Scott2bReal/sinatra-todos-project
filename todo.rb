@@ -17,7 +17,6 @@ end
 
 helpers do
   def completed_list?(list)
-    # todos_count(list).positive? && todos_remaining_count(list).zero?
     list[:todos_count].positive? && list[:todos_remaining_count].zero?
   end
 
@@ -27,10 +26,6 @@ helpers do
 
   def todo_class(todo)
     return "complete" if todo[:completed]
-  end
-
-  def todos_count(list)
-    list[:todos].size
   end
 
   def sorted_lists(lists)
