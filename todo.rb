@@ -17,7 +17,8 @@ end
 
 helpers do
   def completed_list?(list)
-    todos_count(list).positive? && todos_remaining_count(list).zero?
+    # todos_count(list).positive? && todos_remaining_count(list).zero?
+    list[:todos_count].positive? && list[:todos_remaining_count].zero?
   end
 
   def list_class(list)
@@ -28,9 +29,10 @@ helpers do
     return "complete" if todo[:completed]
   end
 
-  def todos_remaining_count(list)
-    list[:todos].select { |todo| !todo[:completed] }.size
-  end
+  # def todos_remaining_count(list)
+  #   # list[:todos].select { |todo| !todo[:completed] }.size
+  #   list[:todos_remaining_count]
+  # end
 
   def todos_count(list)
     list[:todos].size
