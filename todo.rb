@@ -205,7 +205,7 @@ post '/lists/:list_id/todos/:todo_id' do
   @list = load_list(@list_id)
   @todo_id = params[:todo_id].to_i
   puts "params[:completed] = #{params[:completed]}"
-  is_completed = !params[:completed]
+  is_completed = params[:completed] == 'false'
   puts is_completed
 
   @storage.update_todo_status(@list_id, @todo_id, is_completed)
