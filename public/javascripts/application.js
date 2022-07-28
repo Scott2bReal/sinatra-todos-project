@@ -7,7 +7,7 @@ $(function() {
     var ok = confirm("Are you sure? This cannot be undone!");
     if (ok) {
       // this.submit();
-      
+
       var form = $(this);
 
       var request = $.ajax({
