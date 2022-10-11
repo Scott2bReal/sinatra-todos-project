@@ -19,6 +19,7 @@ class DatabasePersistence
     @db.exec_params(statement, params)
   end
 
+  # rubocop:disable Metrics/MethodLength
   def find_list(list_id)
     # sql = "SELECT * FROM lists WHERE id = $1"
     sql = <<~SQL
@@ -55,6 +56,7 @@ class DatabasePersistence
       tuple_to_list_hash(tuple)
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def create_list(name)
     sql = "INSERT INTO lists (name) VALUES ($1)"
